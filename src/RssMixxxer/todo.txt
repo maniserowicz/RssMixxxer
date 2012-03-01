@@ -9,8 +9,16 @@
 + serve configured number of items
 + write local cache of feeds (sql ce)
 + logging
++ periodically update feeds cache in background
 
-* periodically update feeds cache in background
-* serve result feed with proper values (LastUpdatedTime)
-* generate last-modified and etag headers
+* serve result feed
+    * property LastUpdatedTime
+    * header last-modified
+    * header etag
+
+
+# low prio
+
 * custom configuration section
+* multiple instances of mixxxers in a single application
+* composing multiple feeds
