@@ -6,7 +6,6 @@ using Xunit;
 using RssMixxxer.Environment;
 using RssMixxxer.LocalCache;
 using RssMixxxer.Remote;
-using RssMixxxer._Extensions;
 
 namespace RssMixxxer.Tests.LocalCache
 {

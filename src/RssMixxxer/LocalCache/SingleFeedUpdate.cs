@@ -1,6 +1,5 @@
 ﻿using RssMixxxer.Environment;
 using RssMixxxer.Remote;
-using RssMixxxer._Extensions;
 
 namespace RssMixxxer.LocalCache
 {

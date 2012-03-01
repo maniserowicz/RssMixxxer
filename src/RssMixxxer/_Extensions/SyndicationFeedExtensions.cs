@@ -2,7 +2,7 @@
 using System.Text;
 using System.Xml;
 
-namespace RssMixxxer._Extensions
+namespace RssMixxxer
 {
     public static class SyndicationFeedExtensions
     {
