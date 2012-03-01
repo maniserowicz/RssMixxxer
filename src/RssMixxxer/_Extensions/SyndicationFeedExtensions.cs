@@ -1,4 +1,5 @@
-﻿using System.ServiceModel.Syndication;
+﻿using System.IO;
+using System.ServiceModel.Syndication;
 using System.Text;
 using System.Xml;
 
@@ -6,16 +7,22 @@ namespace RssMixxxer
 {
     public static class SyndicationFeedExtensions
     {
+        /// <summary>
+        /// Returns feed content as UTF8-encoded string
+        /// </summary>
         public static string GetRssString(this SyndicationFeed @this)
         {
-            var stringBuilder = new StringBuilder();
-
-            using (var writer = XmlWriter.Create(stringBuilder))
+            using (var memoryStream = new MemoryStream())
             {
-                @this.SaveAsRss20(writer);
-            }
+                using (var writer = XmlWriter.Create(memoryStream))
+                {
+                    @this.SaveAsRss20(writer);
+                }
 
-            return stringBuilder.ToString();
+                var bytes = memoryStream.ToArray();
+
+                return Encoding.UTF8.GetString(bytes);
+            }
         }
     }
 }

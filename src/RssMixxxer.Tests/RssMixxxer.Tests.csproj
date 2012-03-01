@@ -69,6 +69,7 @@
     <Compile Include="LocalCache\updating_single_feed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Remote\reading_feed_from_remote_source.cs" />
+    <Compile Include="_Extensions\saving_rss_feed_as_string.cs" />
     <Compile Include="_Utils\Resource.cs" />
   </ItemGroup>
   <ItemGroup>
