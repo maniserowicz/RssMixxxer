@@ -1,0 +1,16 @@
+﻿+ fetching rss from remote source considering etag and last-modified headers
++ compose multiple rss into one feed, sorted by date descending
++ configure result feed title
++ aggregator configuration (appsettings)
+    + source feeds
+    + result feed title
+    + result feed items count
++ read from local cache of feeds (sql ce)
++ serve configured number of items
++ write local cache of feeds (sql ce)
+
+* periodically update feeds cache in background
+* serve result feed with proper values (LastUpdatedTime)
+* generate last-modified and etag headers
+* logging
+* custom configuration section
