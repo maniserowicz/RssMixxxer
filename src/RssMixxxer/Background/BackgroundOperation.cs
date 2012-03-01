@@ -54,7 +54,7 @@ namespace RssMixxxer.Background
                     {
                         _counter++;
 
-                        _log.Debug("Executing background job, iteration counter: {0}", _counter);
+                        _log.Debug("Executing background operation, iteration counter: {0}", _counter);
 
                         _action();
                     }
@@ -66,7 +66,7 @@ namespace RssMixxxer.Background
                     {
                         if (_isDisposed == false && _timer != null)
                         {
-                            _log.Debug("Scheduling background job to run in {0}", TimeSpan.FromMilliseconds(_timer.Interval).ToString());
+                            _log.Debug("Scheduling background operation to run in {0}", TimeSpan.FromMilliseconds(_timer.Interval).ToString());
 
                             _timer.Start();
                         }
@@ -82,6 +82,9 @@ namespace RssMixxxer.Background
             }
 
             _isDisposed = true;
+
+            _log.Debug("Disposing background operation");
+
             if (_timer != null)
             {
                 _timer.Stop();

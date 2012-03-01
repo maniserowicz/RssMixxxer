@@ -60,6 +60,7 @@
     <Compile Include="LocalCache\LocalFeedsProvider.cs" />
     <Compile Include="LocalCache\SingleFeedUpdate.cs" />
     <Compile Include="LocalFeedInfo.cs" />
+    <Compile Include="MixFeeds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Remote\CannotReachRemoteSourceException.cs" />
     <Compile Include="Remote\RemoteContentResponse.cs" />

@@ -5,5 +5,6 @@
         public string Title { get; set; }
         public int MaxItems { get; set; }
         public string[] SourceFeeds { get; set; }
+        public int SyncInterval_Seconds { get; set; }
     }
 }

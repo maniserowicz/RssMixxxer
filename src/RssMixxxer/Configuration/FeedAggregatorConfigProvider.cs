@@ -18,6 +18,7 @@ namespace RssMixxxer.Configuration
                     Title = appSettings["rssMixxxer.title"],
                     MaxItems = int.Parse(appSettings["rssMixxxer.title"]),
                     SourceFeeds = appSettings["rssMixxxer.src"].Split(';'),
+                    SyncInterval_Seconds = int.Parse(appSettings["rssMixxxer.interval_seconds"]),
                 };
         }
     }
