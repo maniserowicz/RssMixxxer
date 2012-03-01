@@ -3,6 +3,7 @@ using System.IO;
 using System.ServiceModel.Syndication;
 using System.Linq;
 using System.Xml;
+using NLog;
 
 namespace RssMixxxer.Composition
 {
@@ -27,9 +28,14 @@ namespace RssMixxxer.Composition
                 });
 
             var sortedItems = feeds.SelectMany(x => x.Items)
-                .OrderByDescending(x => x.PublishDate);
+                .OrderByDescending(x => x.PublishDate)
+                .ToList();
+
+            _log.Debug("Mixed {0} feeds producing {1} items", sortedItems.Count);
 
             return sortedItems;
         }
+
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
     }
 }

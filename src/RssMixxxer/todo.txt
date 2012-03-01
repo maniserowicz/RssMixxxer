@@ -8,9 +8,9 @@
 + read from local cache of feeds (sql ce)
 + serve configured number of items
 + write local cache of feeds (sql ce)
++ logging
 
 * periodically update feeds cache in background
 * serve result feed with proper values (LastUpdatedTime)
 * generate last-modified and etag headers
-* logging
 * custom configuration section

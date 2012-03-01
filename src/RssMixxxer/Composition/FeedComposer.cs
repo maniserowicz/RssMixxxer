@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel.Syndication;
+using NLog;
 using RssMixxxer.Configuration;
 using RssMixxxer.LocalCache;
 using System.Linq;
@@ -38,8 +39,12 @@ namespace RssMixxxer.Composition
 
             var feed = new SyndicationFeed(items.Take(_config.MaxItems));
             feed.Title = new TextSyndicationContent(_config.Title);
+
+            _log.Debug("Composed result feed '{0}' with {1} items coming from {2} source feeds", feed.Title, feed.Items.Count(), feedsArray.Length);
             
             return feed;
         }
+
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
     }
 }

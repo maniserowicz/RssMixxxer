@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Globalization;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Xml;
+using NLog;
+using System.Linq;
 
 namespace RssMixxxer.Remote
 {
@@ -36,22 +37,39 @@ namespace RssMixxxer.Remote
                     request.Headers[HttpRequestHeader.IfNoneMatch] = feedInfo.Etag;
                 }
 
-                using (var response = request.GetResponseEx())
+                _log.Debug("Trying to read remote source '{0}' (etag: {1}, last fetch: {2})", feedInfo.Url, feedInfo.Etag, feedInfo.LastFetch);
+
+                using (var response = (HttpWebResponse) request.GetResponseEx())
                 {
-                    string etag = response.Headers[HttpResponseHeader.ETag];
-
-                    using (var reader = XmlReader.Create(response.GetResponseStream()))
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        var feed = SyndicationFeed.Load(reader);
+                        string etag = response.Headers[HttpResponseHeader.ETag];
 
-                        return new RemoteContentResponse(true, etag, feed);
+                        using (var reader = XmlReader.Create(response.GetResponseStream()))
+                        {
+                            var feed = SyndicationFeed.Load(reader);
+
+                            _log.Info("Returning new content for remote source '{0}' with {1} items", feedInfo.Url, feed.Items.Count());
+
+                            return new RemoteContentResponse(true, etag, feed);
+                        }
+                    }
+                    else
+                    {
+                        _log.Debug("No new content for remote source '{0}', response status is {1}", feedInfo.Url, response.StatusCode);
+
+                        return RemoteContentResponse.NotModified;
                     }
                 }
             }
             catch (Exception exc)
             {
+                _log.ErrorException(string.Format("Failed to read remote source '{0}'", feedInfo.Url), exc);
+
                 throw new CannotReachRemoteSourceException(feedInfo.Url, exc);
             }
         }
+
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
     }
 }
