@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Background\BackgroundOperation.cs" />
     <Compile Include="Composition\FeedComposer.cs" />
     <Compile Include="Composition\FeedMixer.cs" />
     <Compile Include="Configuration\FeedAggregatorConfig.cs" />
