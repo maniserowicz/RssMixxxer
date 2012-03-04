@@ -31,7 +31,7 @@ namespace RssMixxxer.Composition
                 .OrderByDescending(x => x.PublishDate)
                 .ToList();
 
-            _log.Debug("Mixed {0} feeds producing {1} items", sortedItems.Count);
+            _log.Debug("Mixed {0} feeds producing {1} items", feedContents.Length, sortedItems.Count);
 
             return sortedItems;
         }
