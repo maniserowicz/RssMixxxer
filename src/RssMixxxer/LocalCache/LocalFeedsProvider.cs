@@ -11,7 +11,7 @@ namespace RssMixxxer.LocalCache
     {
          public dynamic Db()
          {
-             return Database.OpenFile("local-feeds.sdf");
+             return Database.OpenNamedConnection("feed_cache");
          }
     }
 }
