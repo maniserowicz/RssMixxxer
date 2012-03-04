@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
 
 namespace RssMixxxer.Configuration
@@ -16,14 +15,16 @@ namespace RssMixxxer.Configuration
             var appSettings = ConfigurationManager.AppSettings;
 
             return new FeedAggregatorConfig
-                {
-                    Title = appSettings["rssMixxxer.title"],
-                    MaxItems = int.Parse(appSettings["rssMixxxer.maxItems"]),
-                    SourceFeeds = appSettings["rssMixxxer.src"]
-                        .Split(new[]{';'}, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(x => x.Trim()).ToArray(),
-                    SyncInterval_Seconds = int.Parse(appSettings["rssMixxxer.interval_seconds"]),
-                };
+            {
+                Title = appSettings["rssMixxxer.title"],
+                MaxItems = int.Parse(appSettings["rssMixxxer.maxItems"]),
+                SourceFeeds = appSettings["rssMixxxer.src"]
+                    .Split(';')
+                    .Select(x => x.Trim())
+                    .Where(x => string.IsNullOrWhiteSpace(x) == false)
+                    .ToArray(),
+                SyncInterval_Seconds = int.Parse(appSettings["rssMixxxer.interval_seconds"]),
+            };
         }
     }
 }
