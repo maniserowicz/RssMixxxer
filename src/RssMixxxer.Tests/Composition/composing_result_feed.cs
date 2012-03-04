@@ -1,5 +1,7 @@
-﻿using System.ServiceModel.Syndication;
+﻿using System;
+using System.ServiceModel.Syndication;
 using FakeItEasy;
+using RssMixxxer.Environment;
 using RssMixxxer.Tests.Configuration;
 using RssMixxxer.Tests.LocalCache;
 using Xunit;
@@ -35,6 +37,19 @@ namespace RssMixxxer.Tests.Composition
             var result = execute();
 
             Assert.Equal(_configurationProvider.ProvideConfig().Title, result.Title.Text);
+        }
+
+        [Fact]
+        public void sets_current_time_as_lastUpdated_in_result_feed_properties()
+        {
+            var now = new DateTime(2012, 2, 15);
+            ApplicationTime._replaceCurrentTimeLogic(() => now);
+
+            var result = execute();
+
+            ApplicationTime._revertToDefaultLogic();
+
+            Assert.Equal(now, result.LastUpdatedTime);
         }
 
         private void add_feed_to_db(string url, string content)

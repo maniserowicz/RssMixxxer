@@ -2,6 +2,7 @@
 using System.ServiceModel.Syndication;
 using NLog;
 using RssMixxxer.Configuration;
+using RssMixxxer.Environment;
 using RssMixxxer.LocalCache;
 using System.Linq;
 
@@ -39,6 +40,7 @@ namespace RssMixxxer.Composition
 
             var feed = new SyndicationFeed(items.Take(_config.MaxItems));
             feed.Title = new TextSyndicationContent(_config.Title);
+            feed.LastUpdatedTime = ApplicationTime.Current;
 
             _log.Debug("Composed result feed '{0}' with {1} items coming from {2} source feeds", feed.Title, feed.Items.Count(), feedsArray.Length);
             
