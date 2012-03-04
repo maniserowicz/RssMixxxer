@@ -20,7 +20,7 @@ namespace RssMixxxer.Composition
                 {
                     using (var stringReader = new StringReader(x))
                     {
-                        using (var xmlReader = XmlReader.Create(stringReader))
+                        using (var xmlReader = new XmlTextReader(stringReader))
                         {
                             return SyndicationFeed.Load(xmlReader);
                         }

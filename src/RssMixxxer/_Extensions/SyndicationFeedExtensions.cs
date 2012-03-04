@@ -21,7 +21,11 @@ namespace RssMixxxer
 
                 var bytes = memoryStream.ToArray();
 
-                return Encoding.UTF8.GetString(bytes);
+                string rssString = Encoding.UTF8.GetString(bytes);
+
+                int xmlStart = rssString.IndexOf('<');
+
+                return rssString.Substring(xmlStart);
             }
         }
     }
