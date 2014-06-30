@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel.Syndication;
-using RssMixxxer.LocalCache;
-using RssMixxxer.Remote;
-using RssMixxxer.Tests.LocalCache;
 using Xunit;
 using RssMixxxer.Composition;
 using System.Linq;
