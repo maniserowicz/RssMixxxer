@@ -78,6 +78,18 @@ namespace RssMixxxer.Tests.Remote
             Assert.Equal(etag, rc.Request.Headers[HttpRequestHeader.IfNoneMatch]);
         }
 
+        [Fact]
+        public void handles_feeds_with_xml_surrounded_by_whitespace()
+        {
+            _validUri = "http://makoweczki.pl/feed/";
+
+            configure_webrequest();
+
+            var response = execute(new LocalFeedInfo { Url = _validUri });
+
+            Assert.Equal(10, response.Content.Items.Count());
+        }
+
         private void ignore_exceptions(Action action)
         {
             try

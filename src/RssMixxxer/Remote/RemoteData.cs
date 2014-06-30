@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Xml;
@@ -45,13 +46,23 @@ namespace RssMixxxer.Remote
                     {
                         string etag = response.Headers[HttpResponseHeader.ETag];
 
-                        using (var reader = XmlReader.Create(response.GetResponseStream()))
+                        Stream responseStream = response.GetResponseStream();
+                        using (var streamReader = new StreamReader(responseStream))
                         {
-                            var feed = SyndicationFeed.Load(reader);
+                            string responseText = streamReader.ReadToEnd()
+                                .Trim();
 
-                            _log.Info("Returning new content for remote source '{0}' with {1} items", feedInfo.Url, feed.Items.Count());
+                            using (var stringReader = new StringReader(responseText))
+                            {
+                                using (var reader = XmlReader.Create(stringReader))
+                                {
+                                    var feed = SyndicationFeed.Load(reader);
 
-                            return new RemoteContentResponse(true, etag, feed);
+                                    _log.Info("Returning new content for remote source '{0}' with {1} items", feedInfo.Url, feed.Items.Count());
+
+                                    return new RemoteContentResponse(true, etag, feed);
+                                }
+                            }
                         }
                     }
                     else
