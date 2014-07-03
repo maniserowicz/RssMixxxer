@@ -9,9 +9,15 @@ namespace RssMixxxer.Remote
 
     public class HttpRequestFactory : IHttpRequestFactory
     {
+        private const string USER_AGENT_STRING = "rssmixxxer/user_agent";
+
         public HttpWebRequest CreateRequest(string uri)
         {
-            return (HttpWebRequest) WebRequest.Create(uri);
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+
+            request.UserAgent = USER_AGENT_STRING;
+
+            return request;
         }
     }
 }
