@@ -67,7 +67,16 @@ namespace RssMixxxer.Remote
                     }
                     else
                     {
-                        _log.Debug("No new content for remote source '{0}', response status is {1}", feedInfo.Url, response.StatusCode);
+                        string message = string.Format("No new content for remote source '{0}', response status is {1}", feedInfo.Url, response.StatusCode);
+
+                        if (response.StatusCode == HttpStatusCode.NotModified)
+                        {
+                            _log.Debug(message);
+                        }
+                        else
+                        {
+                            _log.Warn(message);
+                        }
 
                         return RemoteContentResponse.NotModified;
                     }
