@@ -112,7 +112,7 @@ namespace RssMixxxer.Tests.Remote
                     x =>
                         {
                             uri = uri ?? x.GetArgument<string>(0);
-                            var request = (HttpWebRequest) WebRequest.Create(uri);
+                            var request = new HttpRequestFactory().CreateRequest(uri);
                             if (rc != null)
                             {
                                 rc.Request = request;
