@@ -55,7 +55,6 @@ namespace RssMixxxer
                                 _log.ErrorException(string.Format("Error occured when reading feed '{0}'", src), exc);
                             }
                         }
-
                     }, TimeSpan.FromSeconds(_configProvider.ProvideConfig().SyncInterval_Seconds));
 
                 _backgroundOperation.Start();
