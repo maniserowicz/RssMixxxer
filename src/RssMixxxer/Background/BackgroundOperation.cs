@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using NLog;
 using Timer = System.Timers.Timer;
@@ -50,6 +51,8 @@ namespace RssMixxxer.Background
                         return;
                     }
 
+                    var stopwatch = Stopwatch.StartNew();
+
                     try
                     {
                         _counter++;
@@ -64,6 +67,8 @@ namespace RssMixxxer.Background
                     }
                     finally
                     {
+                        _log.Debug("Background operation finished ({0})", stopwatch.Elapsed);
+
                         if (_isDisposed == false && _timer != null)
                         {
                             _log.Debug("Scheduling background operation to run in {0}", TimeSpan.FromMilliseconds(_timer.Interval).ToString());
