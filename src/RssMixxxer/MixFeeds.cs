@@ -43,8 +43,11 @@ namespace RssMixxxer
                 _backgroundOperation = new BackgroundOperation(() =>
                     {
                         var config = _configProvider.ProvideConfig();
+                        var sourceFeeds = config.SourceFeeds;
 
-                        foreach (var src in config.SourceFeeds)
+                        _log.Debug("Synchronizing {0} feeds", sourceFeeds.Length);
+
+                        foreach (var src in sourceFeeds)
                         {
                             try
                             {
