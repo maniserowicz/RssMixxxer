@@ -52,22 +52,23 @@ namespace RssMixxxer.Background
                     }
 
                     var stopwatch = Stopwatch.StartNew();
+                    var guid = Guid.NewGuid();
 
                     try
                     {
                         _counter++;
 
-                        _log.Debug("Executing background operation, iteration counter: {0}", _counter);
+                        _log.Debug("Executing background operation, iteration counter: {0} (operation {1})", _counter, guid);
 
                         _action();
                     }
                     catch (Exception exc)
                     {
-                        _log.ErrorException("Unhandled error when executing backround operation", exc);
+                        _log.ErrorException(string.Format("Unhandled error when executing background operation ({0})", guid), exc);
                     }
                     finally
                     {
-                        _log.Debug("Background operation finished ({0})", stopwatch.Elapsed);
+                        _log.Debug("Background operation finished ({0}) ({1})", stopwatch.Elapsed, guid);
 
                         if (_isDisposed == false && _timer != null)
                         {
