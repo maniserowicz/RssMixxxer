@@ -38,9 +38,11 @@ namespace RssMixxxer.Remote
                     head_request.Method = "HEAD";
                     using (var head_response = (HttpWebResponse)head_request.GetResponseEx())
                     {
-                        if (head_response.LastModified.ToUniversalTime() < feedInfo.LastFetch.Value.ToUniversalTime())
+                        DateTime last_modified = head_response.LastModified.ToUniversalTime();
+                        DateTime last_fetch = feedInfo.LastFetch.Value.ToUniversalTime();
+                        if (last_modified < last_fetch)
                         {
-                            _log.Debug("HEAD request shows indicates that there is no new content available, returning NotModified.");
+                            _log.Debug("HEAD request indicates that there is no new content available (last_modified={0}, last_fetch={1}), returning NotModified.", last_modified, last_fetch);
                             return RemoteContentResponse.NotModified;
                         }
                     }
