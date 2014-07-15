@@ -1,6 +1,7 @@
 ﻿using RssMixxxer.Composition;
 using RssMixxxer.LocalCache;
 using RssMixxxer.Remote;
+using RssMixxxer.Tests.Configuration;
 using RssMixxxer.Tests.LocalCache;
 using Xunit;
 
@@ -18,7 +19,7 @@ namespace RssMixxxer.Tests.x_Integration
         {
             _feedsProvider = new TestFeedsProvider();
             _httpRequestFactory = new HttpRequestFactory();
-            _remoteData = new RemoteData(_httpRequestFactory);
+            _remoteData = new RemoteData(_httpRequestFactory, new TestConfigurationProvider());
             _singleFeedUpdate = new SingleFeedUpdate(_remoteData, _feedsProvider);
             _feedMixer = new FeedMixer();
         }

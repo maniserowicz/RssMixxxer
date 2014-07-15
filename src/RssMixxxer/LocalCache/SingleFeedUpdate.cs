@@ -42,6 +42,7 @@ namespace RssMixxxer.LocalCache
             }
 
             bool newFeed = feed.LastFetch == null;
+            string previousContent = feed.Content ?? string.Empty;
 
             feed.Content = remoteResponse.Content.GetRssString();
             feed.LastFetch = ApplicationTime.Current;
@@ -58,6 +59,11 @@ namespace RssMixxxer.LocalCache
                 _log.Info("Updating feed '{0}' in local cache", url);
 
                 db.LocalFeedInfo.Update(feed);
+            }
+
+            if (previousContent.GetHashCode() == feed.Content.GetHashCode())
+            {
+                _log.Warn("Wasting resources: updating feed '{0}' with the same content it already had!", url);
             }
         }
 

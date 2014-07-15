@@ -24,6 +24,7 @@ namespace RssMixxxer.Configuration
                     .Where(x => string.IsNullOrWhiteSpace(x) == false)
                     .ToArray(),
                 SyncInterval_Seconds = int.Parse(appSettings["rssMixxxer.interval_seconds"]),
+                PrefetchHeadRequest = bool.Parse(appSettings["rssMixxxer.prefetch_head_request"]),
             };
         }
     }
