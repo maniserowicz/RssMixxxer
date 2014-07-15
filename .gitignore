@@ -29,3 +29,4 @@ StyleCop.Cache
 *.ncrunchproject
 *.ncrunchsolution
 *.crunchsolution.cache
+_NCrunch_*
