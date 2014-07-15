@@ -5,6 +5,7 @@ using System.ServiceModel.Syndication;
 using System.Xml;
 using NLog;
 using System.Linq;
+using RssMixxxer.Configuration;
 
 namespace RssMixxxer.Remote
 {
@@ -17,30 +18,46 @@ namespace RssMixxxer.Remote
     public class RemoteData : IRemoteData
     {
         private readonly IHttpRequestFactory _httpRequestFactory;
+        private readonly IFeedAggregatorConfigProvider _configProvider;
 
-        public RemoteData(IHttpRequestFactory httpRequestFactory)
+        public RemoteData(IHttpRequestFactory httpRequestFactory, IFeedAggregatorConfigProvider configProvider)
         {
             _httpRequestFactory = httpRequestFactory;
+            _configProvider = configProvider;
         }
 
         public RemoteContentResponse ReadRemoteSource(LocalFeedInfo feedInfo)
         {
+            _log.Debug("Trying to read remote source '{0}' (etag: {1}, last fetch: {2})", feedInfo.Url, feedInfo.Etag, feedInfo.LastFetch);
+
             try
             {
-                var request = _httpRequestFactory.CreateRequest(feedInfo.Url);
+                if (feedInfo.LastFetch.HasValue && _configProvider.ProvideConfig().PrefetchHeadRequest)
+                {
+                    var head_request = _httpRequestFactory.CreateRequest(feedInfo.Url);
+                    head_request.Method = "HEAD";
+                    using (var head_response = (HttpWebResponse)head_request.GetResponseEx())
+                    {
+                        if (head_response.LastModified.ToUniversalTime() < feedInfo.LastFetch.Value.ToUniversalTime())
+                        {
+                            _log.Debug("HEAD request shows indicates that there is no new content available, returning NotModified.");
+                            return RemoteContentResponse.NotModified;
+                        }
+                    }
+                }
+
+                var get_request = _httpRequestFactory.CreateRequest(feedInfo.Url);
                 if (feedInfo.LastFetch != null)
                 {
-                    request.IfModifiedSince = feedInfo.LastFetch.Value;
+                    get_request.IfModifiedSince = feedInfo.LastFetch.Value;
                 }
 
                 if (string.IsNullOrWhiteSpace(feedInfo.Etag) == false)
                 {
-                    request.Headers[HttpRequestHeader.IfNoneMatch] = feedInfo.Etag;
+                    get_request.Headers[HttpRequestHeader.IfNoneMatch] = feedInfo.Etag;
                 }
 
-                _log.Debug("Trying to read remote source '{0}' (etag: {1}, last fetch: {2})", feedInfo.Url, feedInfo.Etag, feedInfo.LastFetch);
-
-                using (var response = (HttpWebResponse) request.GetResponseEx())
+                using (var response = (HttpWebResponse) get_request.GetResponseEx())
                 {
                     if (response.StatusCode == HttpStatusCode.OK)
                     {

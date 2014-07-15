@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Net;
 using FakeItEasy;
+using RssMixxxer.Environment;
+using RssMixxxer.Tests.Configuration;
 using Xunit;
 using RssMixxxer.Remote;
 
@@ -14,12 +16,14 @@ namespace RssMixxxer.Tests.Remote
         private RemoteData _remoteData;
         private IHttpRequestFactory HttpRequestFactory;
         private string _incorrectUri;
+        private TestConfigurationProvider _configurationProvider;
 
         public reading_feed_from_remote_source()
         {
             HttpRequestFactory = A.Fake<IHttpRequestFactory>();
 
-            _remoteData = new RemoteData(HttpRequestFactory);
+            _configurationProvider = new TestConfigurationProvider();
+            _remoteData = new RemoteData(HttpRequestFactory, _configurationProvider);
             _incorrectUri = "http://incorrect.uri";
         }
 
@@ -88,6 +92,33 @@ namespace RssMixxxer.Tests.Remote
             var response = execute(new LocalFeedInfo { Url = _validUri });
 
             Assert.Equal(10, response.Content.Items.Count());
+        }
+
+        [Fact]
+        public void issues_HEAD_request_before_GET_to_see_if_new_content_available_when_configured_to_do_so___workaround_for_servers_that_ignore_http_cache_request_headers_like_etag_and_ifmodifiedsince()
+        {
+            _configurationProvider.ProvideConfig().PrefetchHeadRequest = true;
+
+            _validUri = "http://www.blogojciec.pl/feed/";
+
+            configure_webrequest();
+
+            var localFeedInfo = new LocalFeedInfo
+            {
+                Url = _validUri,
+            };
+
+            var first_time_response = execute(localFeedInfo);
+            Assert.True(first_time_response.HasNewContent);
+
+            localFeedInfo.LastFetch = ApplicationTime.Current.AddHours(1);
+            var subsequent_response = execute(localFeedInfo);
+            Assert.False(subsequent_response.HasNewContent);
+
+            localFeedInfo.LastFetch = ApplicationTime.Current.AddDays(-10);
+
+            var response_with_changed_content = execute(localFeedInfo);
+            Assert.True(response_with_changed_content.HasNewContent);
         }
 
         private void ignore_exceptions(Action action)
