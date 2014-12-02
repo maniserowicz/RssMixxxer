@@ -9,7 +9,12 @@ namespace RssMixxxer
     /// <summary>
     /// Entry point for <see cref="RssMixxxer"/>.
     /// </summary>
-    public class MixFeeds : IDisposable
+    public interface IMixFeeds
+    {
+        void ForMyNeeds();
+    }
+
+    public class MixFeeds : IMixFeeds, IDisposable
     {
         private static bool _isRunning;
         private static object _syncRoot = new object();
