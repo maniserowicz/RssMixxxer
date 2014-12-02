@@ -52,22 +52,27 @@ namespace RssMixxxer
 
                         _log.Debug("Synchronizing {0} feeds", sourceFeeds.Length);
 
-                        foreach (var src in sourceFeeds)
-                        {
-                            try
-                            {
-                                _singleFeedUpdate.UpdateFeed(src);
-                            }
-                            catch (Exception exc)
-                            {
-                                _log.ErrorException(string.Format("Error occured when reading feed '{0}'", src), exc);
-                            }
-                        }
+                        process_feeds(sourceFeeds);
                     }, TimeSpan.FromSeconds(_configProvider.ProvideConfig().SyncInterval_Seconds));
 
                 _backgroundOperation.Start();
 
                 _isRunning = true;
+            }
+        }
+
+        protected virtual void process_feeds(string[] sourceFeeds)
+        {
+            foreach (var src in sourceFeeds)
+            {
+                try
+                {
+                    _singleFeedUpdate.UpdateFeed(src);
+                }
+                catch (Exception exc)
+                {
+                    _log.ErrorException(string.Format("Error occured when reading feed '{0}'", src), exc);
+                }
             }
         }
 
