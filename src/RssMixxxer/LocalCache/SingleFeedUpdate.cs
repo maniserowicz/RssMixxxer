@@ -44,7 +44,7 @@ namespace RssMixxxer.LocalCache
             bool newFeed = feed.LastFetch == null;
             string previousContent = feed.Content ?? string.Empty;
 
-            feed.Content = remoteResponse.Content.GetRssString();
+            feed.Content = GetFeedStringContent(remoteResponse);
             feed.LastFetch = ApplicationTime.Current;
             feed.Etag = remoteResponse.Etag;
 
@@ -65,6 +65,14 @@ namespace RssMixxxer.LocalCache
             {
                 _log.Warn("Wasting resources: updating feed '{0}' with the same content it already had!", url);
             }
+        }
+
+        /// <summary>
+        /// Gets whole feed content as string made of all it's items.
+        /// </summary>
+        protected virtual string GetFeedStringContent(RemoteContentResponse remoteResponse)
+        {
+            return remoteResponse.Content.GetRssString();
         }
 
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
