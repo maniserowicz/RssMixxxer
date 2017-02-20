@@ -24,8 +24,10 @@ namespace RssMixxxer.LocalCache
         {
             var db = _localFeedsProvider.Db();
 
-            LocalFeedInfo feed = db.LocalFeedInfo.FindByUrl(url)
-                ?? new LocalFeedInfo()
+            dynamic read_view = GetLocalFeedInfoView(db);
+
+            LocalFeedInfo feed = read_view.FindByUrl(url)
+                ?? new LocalFeedInfo
                     {
                         Url = url,
                     };
@@ -52,19 +54,40 @@ namespace RssMixxxer.LocalCache
             {
                 _log.Info("Inserting new feed '{0}' to local cache", url);
 
-                db.LocalFeedInfo.Insert(feed);
+                InsertNewFeed(db, feed, url);
             }
             else
             {
                 _log.Info("Updating feed '{0}' in local cache", url);
 
-                db.LocalFeedInfo.Update(feed);
+                UpdateExistingFeed(db, feed, url);
             }
 
             if (previousContent.GetHashCode() == feed.Content.GetHashCode())
             {
                 _log.Warn("Wasting resources: updating feed '{0}' with the same content it already had!", url);
             }
+        }
+
+        /// <summary>
+        /// Inserts new feed into DB if not fetched before
+        /// </summary>
+        protected virtual void InsertNewFeed(dynamic db, LocalFeedInfo feed, string url)
+        {
+            db.LocalFeedInfo.Insert(feed);
+        }
+
+        protected virtual void UpdateExistingFeed(dynamic db, LocalFeedInfo feed, string url)
+        {
+            db.LocalFeedInfo.Update(feed);
+        }
+
+        /// <summary>
+        /// View that contains URL column
+        /// </summary>
+        protected virtual dynamic GetLocalFeedInfoView(dynamic db)
+        {
+            return db.LocalFeedInfo;
         }
 
         /// <summary>
