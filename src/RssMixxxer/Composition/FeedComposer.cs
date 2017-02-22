@@ -29,7 +29,10 @@ namespace RssMixxxer.Composition
 
         public SyndicationFeed ComposeFeed()
         {
-            List<LocalFeedInfo> allFeeds = _localFeedsProvider.Db().LocalFeedInfo.All()
+            dynamic db = _localFeedsProvider.Db();
+            dynamic view = GetLocalFeedInfoView(db);
+
+            List<LocalFeedInfo> allFeeds = view.All()
                 .ToList<LocalFeedInfo>();
 
             var feedsArray = allFeeds
@@ -45,6 +48,11 @@ namespace RssMixxxer.Composition
             _log.Debug("Composed result feed '{0}' with {1} items coming from {2} source feeds", feed.Title, feed.Items.Count(), feedsArray.Length);
             
             return feed;
+        }
+
+        protected virtual dynamic GetLocalFeedInfoView(dynamic db)
+        {
+            return db.LocalFeedInfo;
         }
 
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();

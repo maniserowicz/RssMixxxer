@@ -82,9 +82,6 @@ namespace RssMixxxer.LocalCache
             db.LocalFeedInfo.Update(feed);
         }
 
-        /// <summary>
-        /// View that contains URL column
-        /// </summary>
         protected virtual dynamic GetLocalFeedInfoView(dynamic db)
         {
             return db.LocalFeedInfo;
