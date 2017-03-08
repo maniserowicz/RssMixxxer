@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using RssMixxxer.Environment;
 using RssMixxxer.Remote;
 
@@ -34,7 +35,17 @@ namespace RssMixxxer.LocalCache
 
             _log.Debug("Updating {0} feed '{1}'", feed.Id == 0 ? "new" : "existing", url);
 
-            var remoteResponse = _remoteData.ReadRemoteSource(feed);
+            RemoteContentResponse remoteResponse = null;
+
+            try
+            {
+                remoteResponse = _remoteData.ReadRemoteSource(feed);
+            }
+            catch(Exception exc)
+            {
+                OnReadingRemoteSourceError(db, feed, exc);
+                throw;
+            }
 
             if (remoteResponse.HasNewContent == false)
             {
@@ -67,6 +78,11 @@ namespace RssMixxxer.LocalCache
             {
                 _log.Warn("Wasting resources: updating feed '{0}' with the same content it already had!", url);
             }
+        }
+
+        protected virtual void OnReadingRemoteSourceError(dynamic db, LocalFeedInfo feed, Exception exc)
+        {
+            
         }
 
         /// <summary>
