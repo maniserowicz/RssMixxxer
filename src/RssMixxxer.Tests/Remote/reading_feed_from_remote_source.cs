@@ -23,7 +23,7 @@ namespace RssMixxxer.Tests.Remote
             HttpRequestFactory = A.Fake<IHttpRequestFactory>();
 
             _configurationProvider = new TestConfigurationProvider();
-            _remoteData = new RemoteData(HttpRequestFactory, _configurationProvider);
+            _remoteData = new RemoteData(HttpRequestFactory, _configurationProvider, new RemoteContentPreProcessor());
             _incorrectUri = "http://incorrect.uri";
         }
 
@@ -80,18 +80,6 @@ namespace RssMixxxer.Tests.Remote
             );
             
             Assert.Equal(etag, rc.Request.Headers[HttpRequestHeader.IfNoneMatch]);
-        }
-
-        [Fact]
-        public void handles_feeds_with_xml_surrounded_by_whitespace()
-        {
-            _validUri = "http://makoweczki.pl/feed/";
-
-            configure_webrequest();
-
-            var response = execute(new LocalFeedInfo { Url = _validUri });
-
-            Assert.Equal(10, response.Content.Items.Count());
         }
 
         [Fact]

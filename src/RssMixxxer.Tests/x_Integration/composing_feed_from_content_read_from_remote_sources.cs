@@ -19,7 +19,7 @@ namespace RssMixxxer.Tests.x_Integration
         {
             _feedsProvider = new TestFeedsProvider();
             _httpRequestFactory = new HttpRequestFactory();
-            _remoteData = new RemoteData(_httpRequestFactory, new TestConfigurationProvider());
+            _remoteData = new RemoteData(_httpRequestFactory, new TestConfigurationProvider(), new RemoteContentPreProcessor());
             _singleFeedUpdate = new SingleFeedUpdate(_remoteData, _feedsProvider);
             _feedMixer = new FeedMixer();
         }

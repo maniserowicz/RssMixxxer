@@ -69,6 +69,7 @@
     <Compile Include="MixFeeds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Remote\CannotReachRemoteSourceException.cs" />
+    <Compile Include="Remote\RemoteContentPreProcessor.cs" />
     <Compile Include="Remote\RemoteContentResponse.cs" />
     <Compile Include="Remote\RemoteData.cs" />
     <Compile Include="Remote\WebRequestExtensions.cs" />
