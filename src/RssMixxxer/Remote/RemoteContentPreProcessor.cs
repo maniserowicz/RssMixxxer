@@ -9,8 +9,11 @@
     {
         public string PreProcess(string content)
         {
+            string nbsp = ((char)160).ToString();
+
             return content
                 .Trim()
+                .Replace(nbsp, string.Empty)
             ;
         }
     }

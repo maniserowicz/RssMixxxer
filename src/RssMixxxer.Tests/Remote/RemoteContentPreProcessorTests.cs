@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using RssMixxxer.Remote;
@@ -38,6 +37,18 @@ namespace RssMixxxer.Tests.Remote
 
 {VALID_RSS}
 ";
+
+            var result = execute();
+
+            assert_can_be_loaded_as_SyndicationFeed(result);
+        }
+
+        [Fact]
+        public void removes_nonbreaking_spaces()
+        {
+            string invalid_rss = VALID_RSS.Replace("</item>", "</item>" + (char) 160);
+
+            _content = invalid_rss;
 
             var result = execute();
 
