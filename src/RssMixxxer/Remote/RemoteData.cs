@@ -19,11 +19,13 @@ namespace RssMixxxer.Remote
     {
         private readonly IHttpRequestFactory _httpRequestFactory;
         private readonly IFeedAggregatorConfigProvider _configProvider;
+        private readonly IRemoteContentPreProcessor _contentPreProcessor;
 
-        public RemoteData(IHttpRequestFactory httpRequestFactory, IFeedAggregatorConfigProvider configProvider)
+        public RemoteData(IHttpRequestFactory httpRequestFactory, IFeedAggregatorConfigProvider configProvider, IRemoteContentPreProcessor contentPreProcessor)
         {
             _httpRequestFactory = httpRequestFactory;
             _configProvider = configProvider;
+            _contentPreProcessor = contentPreProcessor;
         }
 
         public RemoteContentResponse ReadRemoteSource(LocalFeedInfo feedInfo)
@@ -68,8 +70,9 @@ namespace RssMixxxer.Remote
                         Stream responseStream = response.GetResponseStream();
                         using (var streamReader = new StreamReader(responseStream))
                         {
-                            string responseText = streamReader.ReadToEnd()
-                                .Trim();
+                            string responseText = streamReader.ReadToEnd();
+
+                            responseText = _contentPreProcessor.PreProcess(responseText);
 
                             using (var stringReader = new StringReader(responseText))
                             {

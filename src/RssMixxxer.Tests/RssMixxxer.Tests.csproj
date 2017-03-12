@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Remote\creating_requests.cs" />
     <Compile Include="Remote\reading_feed_from_remote_source.cs" />
+    <Compile Include="Remote\RemoteContentPreProcessorTests.cs" />
     <Compile Include="x_Integration\composing_feed_from_content_read_from_remote_sources.cs" />
     <Compile Include="_Extensions\saving_rss_feed_as_string.cs" />
     <Compile Include="_Utils\Resource.cs" />
