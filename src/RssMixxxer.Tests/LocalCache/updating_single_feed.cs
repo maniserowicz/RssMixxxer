@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.ServiceModel.Syndication;
 using FakeItEasy;
 using Xunit;
@@ -53,7 +54,7 @@ _feedsProvider);
             A.CallTo(
                 () => _remoteData.ReadRemoteSource(
                     A<LocalFeedInfo>.That.Matches(x => x.Url == url && x.LastFetch == null))
-                ).Returns(new RemoteContentResponse(true, "new-etag", newFeed));
+                ).Returns(new RemoteContentResponse(true, "new-etag", newFeed, HttpStatusCode.OK));
 
             execute(url);
 
@@ -88,7 +89,7 @@ _feedsProvider);
                     A<LocalFeedInfo>.That.Matches(x => x.Url == cached.Url && x.Etag == cached.Etag && x.LastFetch == cached.LastFetch)
                 )
             )
-            .Returns(new RemoteContentResponse(true, "new-etag", newFeed));
+            .Returns(new RemoteContentResponse(true, "new-etag", newFeed, HttpStatusCode.OK));
 
             execute(cached.Url);
 
@@ -120,7 +121,7 @@ _feedsProvider);
                     A<LocalFeedInfo>.That.Matches(x => x.Url == cached.Url && x.Etag == cached.Etag && x.LastFetch == cached.LastFetch)
                 )
             )
-            .Returns(RemoteContentResponse.NotModified);
+            .Returns(RemoteContentResponse.NotModified(HttpStatusCode.OK));
 
             execute(cached.Url);
 

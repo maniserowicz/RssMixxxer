@@ -43,6 +43,16 @@ namespace RssMixxxer.Tests.Remote
         }
 
         [Fact]
+        public void saves_HttpStatusCode_from_response()
+        {
+            configure_webrequest();
+
+            var response = execute(new LocalFeedInfo { Url = _validUri });
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
         public void throws_when_given_incorrect_uri()
         {
             configure_webrequest();

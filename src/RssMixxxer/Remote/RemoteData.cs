@@ -45,7 +45,7 @@ namespace RssMixxxer.Remote
                         if (last_modified < last_fetch)
                         {
                             _log.Debug("HEAD request indicates that there is no new content available (last_modified={0}, last_fetch={1}), returning NotModified.", last_modified, last_fetch);
-                            return RemoteContentResponse.NotModified;
+                            return RemoteContentResponse.NotModified(head_response.StatusCode);
                         }
                     }
                 }
@@ -82,7 +82,7 @@ namespace RssMixxxer.Remote
 
                                     _log.Info("Returning new content for remote source '{0}' with {1} items", feedInfo.Url, feed.Items.Count());
 
-                                    return new RemoteContentResponse(true, etag, feed);
+                                    return new RemoteContentResponse(true, etag, feed, response.StatusCode);
                                 }
                             }
                         }
@@ -100,7 +100,7 @@ namespace RssMixxxer.Remote
                             _log.Warn(message);
                         }
 
-                        return RemoteContentResponse.NotModified;
+                        return RemoteContentResponse.NotModified(response.StatusCode);
                     }
                 }
             }
