@@ -39,17 +39,21 @@ namespace RssMixxxer.LocalCache
 
             try
             {
+                OnBeforeReadingRemoteSource(db, feed);
+
                 remoteResponse = _remoteData.ReadRemoteSource(feed);
             }
             catch(Exception exc)
             {
-                OnReadingRemoteSourceError(db, feed, exc);
+                OnReadingRemoteSourceError(db, feed, remoteResponse, exc);
                 throw;
             }
 
             if (remoteResponse.HasNewContent == false)
             {
                 _log.Debug("Feed '{0}' does not have new content", url);
+
+                OnNoNewContentInRemoteSource(db, feed, remoteResponse);
 
                 return;
             }
@@ -80,7 +84,17 @@ namespace RssMixxxer.LocalCache
             }
         }
 
-        protected virtual void OnReadingRemoteSourceError(dynamic db, LocalFeedInfo feed, Exception exc)
+        protected virtual void OnBeforeReadingRemoteSource(dynamic db, LocalFeedInfo feed)
+        {
+            
+        }
+
+        protected virtual void OnNoNewContentInRemoteSource(dynamic db, LocalFeedInfo feed, RemoteContentResponse remoteResponse)
+        {
+            
+        }
+
+        protected virtual void OnReadingRemoteSourceError(dynamic db, LocalFeedInfo feed, RemoteContentResponse remoteResponse, Exception exc)
         {
             
         }
