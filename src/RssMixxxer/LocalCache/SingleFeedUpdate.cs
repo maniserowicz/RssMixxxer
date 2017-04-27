@@ -78,6 +78,8 @@ namespace RssMixxxer.LocalCache
                 UpdateExistingFeed(db, feed, url);
             }
 
+            OnFeedUpdated(db, feed, remoteResponse);
+
             if (previousContent.GetHashCode() == feed.Content.GetHashCode())
             {
                 _log.Warn("Wasting resources: updating feed '{0}' with the same content it already had!", url);
@@ -92,6 +94,11 @@ namespace RssMixxxer.LocalCache
         protected virtual void OnNoNewContentInRemoteSource(dynamic db, LocalFeedInfo feed, RemoteContentResponse remoteResponse)
         {
             
+        }
+
+        protected virtual void OnFeedUpdated(dynamic db, LocalFeedInfo feed, RemoteContentResponse remoteResponse)
+        {
+
         }
 
         protected virtual void OnReadingRemoteSourceError(dynamic db, LocalFeedInfo feed, RemoteContentResponse remoteResponse, Exception exc)
